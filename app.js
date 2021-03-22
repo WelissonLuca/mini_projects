@@ -6,7 +6,7 @@ const session = require('express-session');
 const flash = require('express-flash');
 
 const passport = require('passport');
-
+const localStrategy = require('passport-local').Strategy;
 const router = require('./routes/index');
 const helpers = require('./helpers');
 const errorHandler = require('./handlers/errorHandler');
@@ -27,12 +27,20 @@ app.use(session({
 }));
 app.use(flash());
 
+
 app.use((req, res, next)=>{
     res.locals.h = helpers;
     res.locals.flashes = req.flash();
     next();
 });
 
+
+app.use(passport.initialize());
+app.use(passport.session());
+const User = require('./models/User');
+passport.use(new localStrategy(User.authenticate()));
+passport.serializeUser(User.setMaxListeners());
+passport.deserializeUser(User.deserializeUser());
 app.use('/', router);
 
 app.use(errorHandler.notFound);
