@@ -32,7 +32,16 @@ exports.loginAction = (req, res) => {
             return
         }
 
+        req.login(result, () => {});
+        
+
         req.flash('!sucess', 'vocẽ foi logado com sucesso');
         res.redirect('/')
     });
+}
+
+exports.logout = (req, res) => {
+    req.logout();
+
+    res.redirect('/');
 }
