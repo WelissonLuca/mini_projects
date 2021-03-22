@@ -12,12 +12,27 @@ exports.registerAction = (req, res) => {
     const newUser = new User(req.body)
     User.register(newUser, req.body.password, e => {
         if (e) {
-            console.log('Erro ao registrar:', e)
-            res.redirect('/');
+            req.flash('error', 'Ocorreu um erro, tente mais tarde.')
+            res.redirect('/users/register');
             return;
         }
-
-        res.redirect('/');
+        req.flash('!sucess', 'Registro efeutado com sucesso, faça o login.')
+        res.redirect('/users/login');
     });
     
+}
+
+exports.loginAction = (req, res) => {
+    const auth = User.authenticate();
+
+    auth(req.body.email, req.body.password, (e, result) => {
+        if (!result) {
+            req.flash('error', 'Seu email e/ou senha estão errados');
+            res.redirect('/users/login');
+            return
+        }
+
+        req.flash('!sucess', 'vocẽ foi logado com sucesso');
+        res.redirect('/')
+    });
 }
