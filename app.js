@@ -39,7 +39,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 const User = require('./models/User');
 passport.use(new localStrategy(User.authenticate()));
-passport.serializeUser(User.setMaxListeners());
+passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 app.use('/', router);
 
