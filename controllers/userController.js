@@ -64,3 +64,15 @@ exports.profileAction = async (req, res) => {
     req.flash('success', 'Dados atualizados com sucesso!');
     res.redirect('/profile');
 };
+
+exports.forget = (req, res) => {
+    res.render('forget');
+}
+exports.forgetAction =  async(req, res) => {
+    const user = await User.findOnde({ email: req.body.email }).exec();
+    if (!user) {
+        req.flash('error', 'Um e-mail foi enviador para você');
+        res.redirect('/users/forget')
+        return
+    }
+}
