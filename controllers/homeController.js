@@ -4,30 +4,35 @@ const Post = mongoose.model('Post');
 exports.index = async (req, res)=>{
     let responseJson = { 
         pageTitle:'HOME',
-        posts: [],
-        tags: [],
-        tag: ''
+        posts:[],
+        tags:[],
+        tag:''
     };
-    
+
     responseJson.tag = req.query.t;
-    const postFilter = (typeof responseJson.tag != 'undefined') ? { tags: responseJson.tag }: {} ;
+    const postFilter = (typeof responseJson.tag != 'undefined') ? {tags:responseJson.tag}: {};
 
-    const tagsPromisse =  Post.getTagsList();
-   
-   
-    const postsPromisse =  Post.find(postFilter);
-    
-    const [ tags, posts ] = await Promise.all([tagsPromisse, postsPromisse]);
+    const tagsPromise = Post.getTagsList();
+    const postsPromise = Post.findPosts(postFilter);
 
-    
+    const [ tags, posts ] = await Promise.all([ tagsPromise, postsPromise ]);
 
+    for(let i in tags) {
+        if(tags[i]._id == responseJson.tag) {
+            tags[i].class = "selected";
+        }
+    }
 
-     for (let i in tags) {
-			if (tags[i]._id == responseJson.tag) tags[i].class = "selected";
-     }
-    
-     responseJson.tags = tags;
-     responseJson.posts = posts;
-    
+    if(req.isAuthenticated()) {
+        for(let i in posts) {
+            if(posts[i].author._id.toString() == req.user._id.toString()) {
+                posts[i].canEdit = true;
+            }
+        }
+    }
+
+    responseJson.tags = tags;
+    responseJson.posts = posts;
+
     res.render('home', responseJson);
 }

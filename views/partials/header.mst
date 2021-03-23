@@ -6,9 +6,8 @@
 <body>
 <header>
     <h1>Cabeçalho</h1>
-
     {{#user}}
-         Olá, {{user.name}}! <a href="/users/logout">Sair</a>
+        Olá, <a href="/profile">{{user.name}}</a>!
     {{/user}}
     <hr/>
     <ul>

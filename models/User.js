@@ -1,14 +1,13 @@
-const moongose = require('mongoose');
-const paspportLocalMongoose = require('passport-local-mongoose');
-moongose.Mongoose.Promise = global.Promise;
+const mongoose = require('mongoose');
+const passportLocalMongoose = require('passport-local-mongoose');
 
-const userSchema = new moongose.Schema({
-  name: String,
-  email: String
-})
+mongoose.Promise = global.Promise;
 
-userSchema.plugin(paspportLocalMongoose, {
-  usernameField:'email'
-})
+const userSchema = new mongoose.Schema({
+    name:String,
+    email:String
+});
 
-module.exports = moongose.model('User', userSchema)
+userSchema.plugin(passportLocalMongoose, { usernameField:'email' });
+
+module.exports = mongoose.model('User', userSchema);
