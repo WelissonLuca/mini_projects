@@ -104,6 +104,27 @@ exports.forgetToken = async (req, res) => {
     res.render('forgetPassword')
 }
 
-exports.forgetTokenAction = (req, res) =>{
-    
+exports.forgetTokenAction = async (req, res) =>{
+     
+    const user = await User.findOne({
+        resetPasswordToken: req.params.token,
+        resetPasswordExpires: { $gt: Date.now()}
+    }).exec();
+    if (!user) {
+        req.flash('error', 'Token expirado!')
+        res.redirect('/users/forget')
+        return;
+    }
+
+     if(req.body.password != req.body['password-confirm']) {
+        req.flash('error', 'Senhas não batem');
+        res.redirect('back');
+        return;
+    }
+    user.setPassword(req.body.password, async ()=>{
+        await user.save();
+
+        req.flash('success', 'Senha alterada com sucesso!');
+        res.redirect('/');
+    });
 }
