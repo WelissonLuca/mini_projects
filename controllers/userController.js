@@ -90,9 +90,10 @@ exports.forgetAction =  async(req, res) => {
 }
 
 exports.forgetToken = async (req, res) => {
+    
     const user = await User.findOne({
         resetPasswordToken: req.params.token,
-        resetPasswordExpires: { Sgt: Date.now() }
+        resetPasswordExpires: { $gt: Date.now()}
     }).exec();
     if (!user) {
         req.flash('error', 'Token expirado!')
@@ -101,4 +102,8 @@ exports.forgetToken = async (req, res) => {
     }
 
     res.render('forgetPassword')
+}
+
+exports.forgetTokenAction = (req, res) =>{
+    
 }

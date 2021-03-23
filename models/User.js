@@ -4,10 +4,10 @@ const passportLocalMongoose = require('passport-local-mongoose');
 mongoose.Promise = global.Promise;
 
 const userSchema = new mongoose.Schema({
-    name:String,
-    email: String,
-    resetPasswordToken: String,
-    resetPasswordExpires: Date
+	name: String,
+	email: String,
+	resetPasswordToken: String,
+	resetPasswordExpires: Date,
 });
 
 userSchema.plugin(passportLocalMongoose, { usernameField:'email' });
