@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const crypto = require('crypto');
 
 exports.login = (req, res) => {
     res.render('login');
@@ -69,10 +70,35 @@ exports.forget = (req, res) => {
     res.render('forget');
 }
 exports.forgetAction =  async(req, res) => {
-    const user = await User.findOnde({ email: req.body.email }).exec();
+    const user = await User.findOne({ email: req.body.email }).exec();
     if (!user) {
         req.flash('error', 'Um e-mail foi enviador para você');
         res.redirect('/users/forget')
         return
     }
+
+    user.resetPasswordToken = crypto.randomBytes(20).toString('hex');
+    user.resetPasswordExpires = Date.now() + 3600000;
+    await user.save();
+
+    const resetLink = `http://${req.headers.host}/users/reset/${user.resetPasswordToken}`
+
+
+    req.flash("success", "Te enviamos um e-mail com instruções. " + resetLink);
+    res.redirect('/users/login');
+
+}
+
+exports.forgetToken = async (req, res) => {
+    const user = await User.findOne({
+        resetPasswordToken: req.params.token,
+        resetPasswordExpires: { Sgt: Date.now() }
+    }).exec();
+    if (!user) {
+        req.flash('error', 'Token expirado!')
+        res.redirect('/users/forget')
+        return;
+    }
+
+    res.render('forgetPassword')
 }
