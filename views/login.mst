@@ -8,19 +8,19 @@
         E-mail:
         <input type="email" name="email" />
     </label>
-    <br/>
+    <br />
 
     <label>
         Senha:
         <input type="password" name="password" />
     </label>
-    <br/>
+    <br />
 
     <label>
         <input type="submit" value="Logar" />
     </label>
 
-    
+
 
 </form>
 

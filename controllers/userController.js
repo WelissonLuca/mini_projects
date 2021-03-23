@@ -94,7 +94,7 @@ exports.forgetAction = async (req, res) => {
 		subject: "resetar sua senha",
 		html,
 		text,
-		to
+		to,
 	});
 
 	req.flash("success", "Te enviamos um e-mail com instruções. ");
