@@ -1,0 +1,29 @@
+body{
+  margin: 0;
+  padding: 0;
+}
+.page{
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#loginPage{
+  display: flex;
+  background: #fff;
+}
+#loginNameInput{
+  border: px solid #000;
+  background: #ccc;
+  font-size: 18px;
+  padding: 10px;
+  border-radius: 5px;
+  outline: none;
+  width: 100%;
+  max-width: 400px;
+}
+#chatPage{
+  display: none;
+}
