@@ -1,90 +1,82 @@
-const NoteServices = require('../services/NoteService')
+const NoteServices = require("../services/NoteService");
 module.exports = {
+	ping: (req, res) => {
+		res.json({ pong: true });
+	},
 
+	all: async (req, res) => {
+		let json = { error: "", result: [] };
 
-  ping: (req, res) => {
-    res.json({ pong: true });
-  },
+		let notes = await NoteServices.getAll();
 
-  all: async (req,res) => {
-    let json = { error: '', result: [] };
+		for (let i in notes) {
+			json.result.push({
+				id: notes[i].id,
+				title: notes[i].title,
+			});
+		}
 
-    let notes = await NoteServices.getAll();
+		res.json(json);
+	},
 
-    for (let i in notes) {
-      json.result.push({
-        id: notes[i].id,
-        title: notes[i].title
-      })
-    }
-    
-    res.json(json)
-  },
+	one: async (req, res) => {
+		let json = { error: "", result: {} };
 
-  one: async (req, res) => {
-    let json = { error: "", result: {} };
-    
-    let id = req.params.id;
+		let id = req.params.id;
 
-    let note = await NoteServices.findById(id);
+		let note = await NoteServices.findById(id);
 
-    if (note) 
-      json.result = note;
-    
+		if (note) json.result = note;
 
-    res.json(json)
-  },
+		res.json(json);
+	},
 
-  new: async (req, res) => {
-    let json = { error: '', result: {} };
+	new: async (req, res) => {
+		let json = { error: "", result: {} };
 
-    let title = req.body.title;
-    let body = req.body.body;
+		let title = req.body.title;
+		let body = req.body.body;
 
-    if (title && body) {
+		if (title && body) {
+			let noteId = await NoteService.add(title, body);
 
-      let noteId = await NoteService.add(title, body);
+			json.result = {
+				id: noteId,
+				title,
+				body,
+			};
+		} else {
+			json.error = "Campos não enviados";
+		}
 
-      json.result = {
-        id: noteId,
-        title,
-        body
-      };
+		res.json(json);
+	},
+	edit: async (req, res) => {
+		let json = { error: "", result: {} };
+		let id = req.params.id;
 
-    } else {
-      json.error = 'Campos não enviados';
-    }
+		let title = req.body.title;
+		let body = req.body.body;
 
-    res.json(json);
+		if (id && title && body) {
+			await NoteService.update(id, title, body);
 
-  },
-  edit: async (req,res) => {
-    let json = { error: "", result: {} };
-    let id = req.params.id;
+			json.result = {
+				id,
+				title,
+				body,
+			};
+		} else {
+			json.error = "Campos não enviados";
+		}
 
-	let title = req.body.title;
-	let body = req.body.body;
+		res.json(json);
+	},
 
-	if (id && title && body) {
-	  await NoteService.update(id ,title, body);
+	delete: async (req, res) => {
+		let json = { error: "", result: {} };
+		await NoteServices.delete(req.params.id);
 
-    json.result = {
-		id,
-		title,
-		body,
-	};
-	
-	} else {
-		json.error = "Campos não enviados";
-	}
-
-	res.json(json);
-  },
-
-  delete: async (req, res) => {
-    let json = { error: "", result: {} };
-    await NoteServices.delete(req.params.id)
-
-	  res.json(json);
-  }
+		res.json(json);
+	},
 };
