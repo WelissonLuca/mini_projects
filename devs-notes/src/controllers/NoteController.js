@@ -81,7 +81,10 @@ module.exports = {
 	res.json(json);
   },
 
-  delete: () => {
+  delete: async (req, res) => {
+    let json = { error: "", result: {} };
+    await NoteServices.delete(req.params.id)
 
+	  res.json(json);
   }
 };
