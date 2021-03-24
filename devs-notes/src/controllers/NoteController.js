@@ -21,8 +21,18 @@ module.exports = {
     res.json(json)
   },
 
-  one: () => {
+  one: async (req, res) => {
+    let json = { error: "", result: {} };
+    
+    let id = req.params.id;
 
+    let note = await NoteServices.findById(id);
+
+    if (note) 
+      json.result = note;
+    
+
+    res.json(json)
   },
 
   new: () => {
