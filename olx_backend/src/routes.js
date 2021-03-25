@@ -20,7 +20,7 @@ router.put('/user/me', UserController.editAction);
 router.get('/categories', AdsController.getCategories);
 
 
-router.post('/ad/add', addAction);
+router.post('/ad/add', AdsController.addAction);
 router.get('/ad/list', AdsController.getList);
 router.get('/ad/item', AdsController.getItem);
 
