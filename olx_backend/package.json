@@ -18,5 +18,8 @@
     "jimp": "^0.16.1",
     "mongoose": "^5.12.2",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   }
 }
