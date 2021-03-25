@@ -41,5 +41,15 @@ io.on('connection', (socket) => {
 
   })
 
+  socket.on('send-msg', txt => {
+    let obj = {
+      username: socket.username,
+      message: txt
+    }
+
+    
+
+    socket.broadcast.emit('show-msg', obj)
+  })
   
 });
