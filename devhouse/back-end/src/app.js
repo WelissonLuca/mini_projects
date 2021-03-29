@@ -1,20 +1,24 @@
-import express from require('express');
-import routes from require('./routes');
-class App{
-    constructor() {
-        this.server = express();
+import express from "express";
 
-        this.middlewares();
-        this.routes();
-    }
+import routes from "./routes";
 
-    middlewares() {
-        this.server.use(express.json());
-     }
-    
-    routes() {
-        this.server.use(routes)
-    }
+class App {
+	constructor() {
+		this.server = express();
+
+	
+
+		this.middlewares();
+		this.routes();
+	}
+
+	middlewares() {
+		this.server.use(express.json());
+	}
+
+	routes() {
+		this.server.use(routes);
+	}
 }
 
-module.exports = new App().server
+export default new App().server;
